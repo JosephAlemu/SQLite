@@ -1,5 +1,6 @@
 package com.example.user.sqlite;
 
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,11 +12,17 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class Celebrity_list extends AppCompatActivity {
 
 
+   // CelebrityRegister celebrityRegister;
+
+   // DBAdapter dBAdapter;
+
     CelebrityRegister celebrityRegister;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,9 +42,10 @@ public class Celebrity_list extends AppCompatActivity {
 
     public  void  listView(){
 
-        celebrityRegister =new CelebrityRegister(this);
 
 
+
+        celebrityRegister = new CelebrityRegister(this);
 
         final ArrayList<CelebrityData> celebrityList = celebrityRegister.getCelebrityList();
 
@@ -50,5 +58,8 @@ public class Celebrity_list extends AppCompatActivity {
 
 
     }
+
+
+
 
 }

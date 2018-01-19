@@ -10,15 +10,15 @@ public class CelebrityData {
     String strFirstName;
     String strLastName;
     String strTittle;
-    String event_description;
+    String  strDescription;
 
 
-    public CelebrityData(Integer id, String strFirstName, String strLastName, String strTittle, String event_description) {
+    public CelebrityData(Integer id, String strFirstName, String strLastName, String strTittle, String strDescription) {
         this.id = id;
         this.strFirstName = strFirstName;
         this.strLastName = strLastName;
         this.strTittle = strTittle;
-        this.event_description = event_description;
+        this.strDescription = strDescription;
     }
 
     public Integer getId() {
@@ -54,12 +54,12 @@ public class CelebrityData {
         this.strTittle = strTittle;
     }
 
-    public String getEvent_description() {
-        return event_description;
+    public String getStrDescription() {
+        return strDescription;
     }
 
-    public void setEvent_description(String event_description) {
-        this.event_description = event_description;
+    public void setStrDescription(String strDescription) {
+        this.strDescription = strDescription;
     }
 
 
@@ -70,7 +70,7 @@ public class CelebrityData {
                 ", strFirstName='" + strFirstName + '\'' +
                 ", strLastName='" + strLastName + '\'' +
                 ", strTittle='" + strTittle + '\'' +
-                ", event_description='" + event_description + '\'' +
+                ", event_description='" + strDescription + '\'' +
                 '}';
     }
 }

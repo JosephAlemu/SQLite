@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,8 +27,9 @@ public class MainActivity extends AppCompatActivity {
     String strEditName;
     String strEditLast;
     String strEditTitle;
-    CelebrityRegister celebrityRegister;
+    //CelebrityRegister celebrityRegister;
 
+    CelebrityRegister celebrityRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +70,9 @@ public class MainActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.btnCelebrityAdd:
 
-                celebrityRegister.addCelebrity(strEditName,strEditLast,strEditTitle,strEditDescription);
+                celebrityRegister.addCelebrity( strEditName, strEditLast,strEditTitle,strEditDescription);
 
+                //String firstname, String lastname, String title,String description
                 break;
 
             case R.id.btnGetCelebrityList:

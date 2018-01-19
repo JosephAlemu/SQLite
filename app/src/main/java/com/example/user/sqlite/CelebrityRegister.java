@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class CelebrityRegister extends SQLiteOpenHelper {
             + COLUMN_FIRST + " text,"
             + COLUMN_LAST + " text,"
             + COLUMN_TITLE + " text,"
-            + COLUMN_DESCRIPTION + " text )";
+            + COLUMN_DESCRIPTION + " text );";
 
 
     public CelebrityRegister(Context context) {
@@ -48,6 +49,33 @@ public class CelebrityRegister extends SQLiteOpenHelper {
         this.context = context;
 
 
+    }
+
+    // Change an existing row to be equal to new data.
+    public boolean updateRow(long rowId, String strEditName, String strEditLast, String strEditTitle, String strEditDescription ) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String where = COLUMN_ID + "=" + rowId;
+
+        Log.d("First", "string:::: " + rowId);
+        Log.d("First", "string:::: " + strEditName);
+        Log.d("First", "string:::: " + strEditLast);
+        Log.d("First", "string:::: " + strEditTitle);
+        Log.d("First", "string:::: " + strEditDescription);
+
+        // TODO: Update data in the row with new fields.
+
+        ContentValues newValues = new ContentValues();
+
+        newValues.put(COLUMN_FIRST, strEditName);
+        newValues.put(COLUMN_LAST, strEditLast);
+        newValues.put(COLUMN_TITLE, strEditTitle);
+        newValues.put(COLUMN_DESCRIPTION, strEditDescription);
+
+
+        db.update(TABLE_NAME, newValues, COLUMN_ID + "=" + rowId, null);
+
+        // Insert it into the database.
+        return    true;//db.update(TABLE_NAME, newValues, where, null) != 0;
     }
 
 
@@ -99,18 +127,21 @@ public class CelebrityRegister extends SQLiteOpenHelper {
 
     }
 
-    public void deleteCelebrity(String productName)
-    {
-        SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_FIRST + "=\"" + productName + "\";");
-   }
 
+
+    public boolean deleteRow(long rowId) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String where = COLUMN_ID + "=" + rowId;
+        return db.delete(TABLE_NAME, where, null) != 0;
+    }
     // this is goint in record_TextView in the Main activity.
 
     public ArrayList<CelebrityData> getCelebrityList() {
         SQLiteDatabase database = getWritableDatabase();
 
-        ArrayList<CelebrityData> CelebrityList = new ArrayList<>();
+        ArrayList<CelebrityData>  celebrityList = new ArrayList<>();
         Cursor cursor =
                 database.rawQuery("SELECT * FROM "
                         + TABLE_NAME, null);
@@ -123,12 +154,12 @@ public class CelebrityRegister extends SQLiteOpenHelper {
                         cursor.getString(3),
                         cursor.getString(4));
 
-                CelebrityList.add(celebrityData);
+                celebrityList.add(celebrityData);
             } while (cursor.moveToNext());
         }
         database.close();
 
-        return CelebrityList;
+        return celebrityList;
     }
 }
 
