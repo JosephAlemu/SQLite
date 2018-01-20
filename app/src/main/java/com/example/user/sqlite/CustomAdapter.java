@@ -14,70 +14,76 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import static android.support.v4.content.ContextCompat.startActivity;
-
 /**
  * Created by user on 1/16/2018.
  */
 
-public class CustomAdapter extends ArrayAdapter<CelebrityData> {
+public class CustomAdapter extends ArrayAdapter<CelebrityPerson> {
 
 
-     CelebrityRegister celebrityRegister;
+    //CelebrityRegister celebrityRegister;
+    DBAdapter myDb;
+    Context context;
+   static ArrayList<Integer> myfavList = new ArrayList<Integer> ();
 
-    Context finalcontext;
-    public CustomAdapter(Context context, ArrayList<CelebrityData> data) {
+    public CustomAdapter(Context context, ArrayList<CelebrityPerson> data) {
         super(context, R.layout.row_item, data);
-        finalcontext  = context;
+        this.context = context;
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-       final CelebrityData singleCelebrityData;
+        final CelebrityPerson singleCelebrityPerson;
 
 
         LayoutInflater myinflator = LayoutInflater.from(getContext());
-        View customView = myinflator.inflate(R.layout.row_item,parent, false);
+        View customView = myinflator.inflate(R.layout.row_item, parent, false);
 
-          singleCelebrityData= getItem(position);
+        singleCelebrityPerson = getItem(position);
 
-        TextView txtFirstName= (TextView)customView.findViewById(R.id.txtFirstName);
-        TextView  txtLastName= (TextView)customView.findViewById(R.id.txtLastName);
-        TextView  txtTitle= (TextView)customView.findViewById(R.id.txtTitle);
-        TextView  txtDes= (TextView)customView.findViewById(R.id.txtDes);
-
-        ImageButton  btnDelet = (ImageButton)customView.findViewById(R.id.btnDelet);
-        ImageButton btnUpdate = (ImageButton)customView.findViewById(R.id.btnUpdate);
-        ImageButton btnFav = (ImageButton)customView.findViewById(R.id.btnFav);
+        TextView txtname = (TextView) customView.findViewById(R.id.txtname);
+        TextView txtage = (TextView) customView.findViewById(R.id.txtage);
+        TextView txtgender = (TextView) customView.findViewById(R.id.txtgender);
 
 
-        txtFirstName.setText(singleCelebrityData.getStrFirstName());
-        txtLastName.setText(singleCelebrityData.getStrLastName());
-        txtTitle.setText(singleCelebrityData.getStrTittle());
-        txtDes.setText(singleCelebrityData.getStrDescription());
+        ImageButton btnDelet = (ImageButton) customView.findViewById(R.id.btnDelet);
+        ImageButton btnUpdate = (ImageButton) customView.findViewById(R.id.btnUpdate);
+        ImageButton btnFav = (ImageButton) customView.findViewById(R.id.btnFav);
 
+
+
+        txtname.setText(singleCelebrityPerson.getName());
+        txtage.setText(singleCelebrityPerson.getAge());
+        txtgender.setText(singleCelebrityPerson.getGender());
 
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("First", "string: " + singleCelebrityData.getStrFirstName());
+                Log.d("First", "string: " + singleCelebrityPerson.getName());
 
 
-                Toast.makeText(getContext(), "Update button clicked: " + singleCelebrityData.getStrTittle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Update button clicked: " + singleCelebrityPerson.getName(), Toast.LENGTH_SHORT).show();
             }
         });
 
         btnDelet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("First", "string: " + singleCelebrityData.getStrFirstName());
+                Log.d("First", "string: " + singleCelebrityPerson.getName());
 
 
-                Toast.makeText(getContext(), "Delet button clicked: " + singleCelebrityData.getStrTittle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Delet button clicked: " + singleCelebrityPerson.getName(), Toast.LENGTH_SHORT).show();
 
-                celebrityRegister =new CelebrityRegister(getContext());
-                celebrityRegister.deleteRow(position);
+                myDb = new DBAdapter(getContext());
+                myDb.open();
+
+                myDb.deleteRow(singleCelebrityPerson.getId());
+                myDb.close();
+
+                Intent intent = new Intent(context, Celebrity_listActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
         });
 
@@ -85,38 +91,26 @@ public class CustomAdapter extends ArrayAdapter<CelebrityData> {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("First", "string: " + singleCelebrityData.getStrFirstName());
+                Log.d("First", "string: " + singleCelebrityPerson.getName());
 
 
-                Toast.makeText(getContext(), "Delet button clicked: " + singleCelebrityData.getStrTittle(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Delet button clicked: " + singleCelebrityPerson.getName(), Toast.LENGTH_SHORT).show();
 
 
-
-               // Intent intent = new Intent(context,UpdateActivity.class);
-
-
-                Intent intent = new Intent(finalcontext, UpdateActivity.class);
-
+                Intent intent = new Intent(context, UpdateActivity.class);
 
                 Bundle extras = new Bundle();
 
 
+                extras.putString("id", singleCelebrityPerson.getId()+"");
+                extras.putString("name", singleCelebrityPerson.getName());
+                extras.putString("age", singleCelebrityPerson.getAge());
+                extras.putString("gender", singleCelebrityPerson.getGender());
+                extras.putString("favorite", singleCelebrityPerson.getFavorite());
 
-
-                extras.putString("id", position+"");
-                extras.putString("firstname", singleCelebrityData.getStrFirstName());
-                extras.putString("lastname", singleCelebrityData.getStrLastName());
-                extras.putString("title", singleCelebrityData.getStrTittle());
-                extras.putString("description", singleCelebrityData.getStrDescription());
                 intent.putExtras(extras);
-
-
-
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                finalcontext.startActivity(intent);
-
-
+                context.startActivity(intent);
 
 
             }
@@ -128,17 +122,17 @@ public class CustomAdapter extends ArrayAdapter<CelebrityData> {
             public void onClick(View view) {
 
 
+                Toast.makeText(getContext(), singleCelebrityPerson.getName()+"  to added My Favorite Celebrity list", Toast.LENGTH_SHORT).show();
+                myDb = new DBAdapter(getContext());
+                myDb.open();
 
-                Toast.makeText(getContext(), "Favorite button clicked: " + singleCelebrityData.getStrTittle(), Toast.LENGTH_SHORT).show();
-
-
-
-
-
+                myDb.updateRow(singleCelebrityPerson.getId(),singleCelebrityPerson.getName(),singleCelebrityPerson.getGender(),singleCelebrityPerson.getAge(),"true");
+                myDb.close();;
 
             }
 
         });
+
 
         return customView;
     }

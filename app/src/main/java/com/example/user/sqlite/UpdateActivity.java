@@ -1,29 +1,28 @@
 package com.example.user.sqlite;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
 public class UpdateActivity extends AppCompatActivity {
 
-
     String id;
-    String firstname;
-    String lastname;
-    String title;
-    String description;
-    EditText ettvfistName;
-    EditText edtvLastName;
-    EditText ettxtTitle;
-    EditText etDescription;
+    String name;
+    String gender;
+    String age;
+    String favorite;
+    EditText edtName;
+    EditText edtGender;
+    EditText edtAge;
+    DBAdapter myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
 
@@ -32,51 +31,57 @@ public class UpdateActivity extends AppCompatActivity {
 
         id = extras.getString("id");
 
-        firstname = extras.getString("firstname");
-        lastname = extras.getString("lastname");
-        title = extras.getString("title");
-        description = extras.getString("lastName");
+        name = extras.getString("name");
+        gender = extras.getString("gender");
+        age = extras.getString("age");
+        favorite = extras.getString("favorite");
 
 
-        ettvfistName = (EditText) findViewById(R.id.ettvfistName);
-        edtvLastName = (EditText) findViewById(R.id.edtvLastName);
-        ettxtTitle = (EditText) findViewById(R.id.ettxtTitle);
-        etDescription = (EditText) findViewById(R.id.etDescription);
+
+        edtName = (EditText) findViewById(R.id.edtName);
+        edtGender = (EditText) findViewById(R.id.edtGender);
+        edtAge = (EditText) findViewById(R.id.edtAge);
 
 
-        ettvfistName.setText(firstname);
-        edtvLastName.setText(lastname);
-        ettxtTitle.setText(title);
-        etDescription.setText(description);
+
+        edtName.setText(name);
+        edtGender.setText(gender);
+        edtAge.setText(age);
 
 
+        openDB();
+
+
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+
+    private void openDB() {
+        myDb = new DBAdapter(this);
+        myDb.open();
+    }
+    private void closeDB() {
+        myDb.close();
     }
 
 
     public void onUpdate(View view) {
 
 
-        firstname = ettvfistName.getText().toString().trim();
-        lastname = edtvLastName.getText().toString().trim();
-        title = ettxtTitle.getText().toString().trim();
-        description = etDescription.getText().toString().trim();
+        name = edtName.getText().toString().trim();
+        gender = edtGender.getText().toString().trim();
+        age = edtAge.getText().toString().trim();
 
 
         int rowid = Integer.parseInt(id);
+        boolean n =   myDb.updateRow(rowid, name, gender, age,favorite);
 
-
-        Log.d("First", "string::::> " + rowid);
-        Log.d("First", "string::::> " + firstname);
-        Log.d("First", "string::::> " + lastname);
-        Log.d("First", "string::::>" + title);
-        Log.d("First", "string::::> " + description);
-
-        CelebrityRegister celebrityRegister = new CelebrityRegister(this);
-
-      boolean n =   celebrityRegister.updateRow(rowid, firstname, lastname, title, description);
-        Log.d("First", "string::::> " +  n );
-
-        Intent newintent = new Intent(this, Celebrity_list.class);
+        Intent newintent = new Intent(this, Celebrity_listActivity.class);
 
         startActivity(newintent);
 

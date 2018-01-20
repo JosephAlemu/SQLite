@@ -3,59 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="#e0e1e2"
     android:layout_height="match_parent">
+
     <LinearLayout
 
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_height="wrap_content"
-        android:weightSum="2"
-        >
-    <TextView
-        android:id="@+id/txtFirstName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:gravity="right"
-        android:layout_weight="0.5"
-        android:paddingLeft="20dp"
-        android:layout_alignParentTop="true"
-        android:text="FirstName"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/black" />
+        android:layout_height="wrap_content"  >
+
 
         <TextView
-            android:id="@+id/txtLastName"
+            android:id="@+id/txtname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
             android:layout_marginTop="5dp"
             android:layout_weight="0.5"
-            android:gravity="right"
-            android:text="LastName"
+           android:paddingLeft="20dp"
+            android:text="name"
             android:textColor="@android:color/black" />
 
     </LinearLayout>
     <TextView
-        android:id="@+id/txtTitle"
+        android:id="@+id/txtgender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:gravity="right"
-        android:text="Title"
+        android:text="gender"
         android:paddingLeft="20dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/black" />
 
 
     <TextView
-        android:id="@+id/txtDes"
+        android:id="@+id/txtage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:paddingLeft="20dp"
         android:gravity="right"
-        android:text="Description"
+        android:text="age"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/black" />
     <LinearLayout
@@ -84,7 +73,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:srcCompat="@android:drawable/btn_star_big_on" />
-
 
 
     </LinearLayout>

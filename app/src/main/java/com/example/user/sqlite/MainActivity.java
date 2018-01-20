@@ -1,96 +1,91 @@
 package com.example.user.sqlite;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.nfc.Tag;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
+/*
+ * Steps to using the DB:
+ * 1. [DONE] Instantiate the DB Adapter
+ * 2. [DONE] Open the DB
+ * 3. [DONE] use get, insert, delete, .. to change data.
+ * 4. [DONE]Close the DB
+ */
 
-import java.util.List;
+/**
+ * Demo application to show how to use the
+ * built-in SQL lite database.
+ */
+public class MainActivity extends Activity {
 
-public class MainActivity extends AppCompatActivity {
-
-    EditText txtEditDescription;
-    EditText txtEditName;
-    EditText txtEditLast;
-    EditText txtEditTitle;
-    ListView lvCelebrity;
-
-    String strEditDescription;
-    String strEditName;
-    String strEditLast;
-    String strEditTitle;
-    //CelebrityRegister celebrityRegister;
-
-    CelebrityRegister celebrityRegister;
+    DBAdapter myDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bindView();
-
-
-    }
-    private void bindView()
-
-    {
-
-        txtEditName = (EditText) findViewById(R.id.txtEditName);
-        txtEditLast = (EditText) findViewById(R.id.txtEditLast);
-        txtEditTitle = (EditText) findViewById(R.id.txtEditTitle);
-        txtEditDescription = (EditText) findViewById(R.id.txtEditDescription);
-        txtEditDescription = (EditText) findViewById(R.id.txtEditDescription);
-           lvCelebrity = (ListView)findViewById(R.id.lvCelebrity);
-
-    }
-
-
-    public void onHandlingDatabase(View view) {
-
-
-        strEditName =   txtEditName.getText().toString();
-        strEditLast =  txtEditLast.getText().toString();
-        strEditTitle =  txtEditTitle.getText().toString();
-        strEditDescription =  txtEditDescription.getText().toString();
-
-
-        celebrityRegister =new CelebrityRegister(this);
-
-        switch (view.getId()) {
-            case R.id.btnCelebrityAdd:
-
-                celebrityRegister.addCelebrity( strEditName, strEditLast,strEditTitle,strEditDescription);
-
-                //String firstname, String lastname, String title,String description
-                break;
-
-            case R.id.btnGetCelebrityList:
-
-                 Intent intent;
-
-                intent = new Intent(this, Celebrity_list.class);
-                startActivity(intent);
-
-
-
-
-                break;
-        }
+        openDB();
 
 
 
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        closeDB();
+    }
+
+
+    private void openDB() {
+        myDb = new DBAdapter(this);
+        myDb.open();
+    }
+    private void closeDB() {
+        myDb.close();
+    }
+
+
+
+    public void onClick_AddRecord(View v) {
+      //  displayText("Clicked add record!");
+
+        EditText editName = (EditText) findViewById(R.id.editName);
+        EditText editGender = (EditText) findViewById(R.id.editGender);
+        EditText editAge = (EditText) findViewById(R.id.editAge);
+
+
+        long newId = myDb.insertRow(editName.getText().toString(), editGender.getText().toString(), editAge.getText().toString(),"false");
+
+        Intent intent = new Intent(this, Celebrity_listActivity.class);
+        startActivity(intent);
+
+    }
+
+
+    public void onClick_DisplayCelebrity(View view) {
+
+        Intent intent = new Intent(this, Celebrity_listActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void onClick_ClearAll(View view) {
+
+        myDb.deleteAll();
+        Toast.makeText(this, "Celebreitiy List Successfully cleared", Toast.LENGTH_SHORT).show();
+    }
+
 
 
 }
+
+
+
+
+
+
+
